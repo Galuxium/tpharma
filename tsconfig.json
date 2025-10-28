@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "noEmit": true,
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "baseUrl": ".",
+    "paths": {
+      "@supabase/*": ["app/supabase/*"],
+      "@hooks/*": ["app/hooks/*"],
+      "@types/*": ["app/types/*"],
+      "@components/*": ["app/components/*"],
+      "@utils/*": ["app/utils/*"],
+      "@models/*": ["app/models/*"]
+    },
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "outDir": "./dist",
+    "rootDir": "."
+  },
+  "include": ["app"],
+  "exclude": ["node_modules", "dist"]
+}
