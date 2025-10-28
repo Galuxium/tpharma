@@ -1,0 +1,136 @@
+css
+/*globals.css*/
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Design Tokens */
+:root {
+  /* Colors */
+  --tp-primary-blue: #0057ff; /* Trustworthy primary color */
+  --tp-accent-green: #2ecc71; /* Health-positive accent */
+  --tp-secondary-yellow: #f1c40f; /* Alert/important elements */
+  --tp-neutral-gray: #717171; /* Neutral gray for text */
+  --tp-white: #ffffff;
+  --tp-light-gray: #f8f9fa;
+  --tp-dark-gray: #333333;
+
+  /* Typography */
+  --tp-font-family: 'Inter', sans-serif;
+  --tp-base-font-size: 16px;
+  --tp-heading-size: 1.5rem;
+  --tp-button-font-size: 1rem;
+
+  /* Spacing */
+  --tp-spacing-sm: 0.5rem;
+  --tp-spacing-md: 1rem;
+  --tp-spacing-lg: 1.5rem;
+  --tp-card-padding: 1.5rem;
+
+  /* Shadows */
+  --tp-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --tp-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.15);
+
+  /* Radii */
+  --tp-radius-sm: 0.25rem;
+  --tp-radius-md: 0.5rem;
+  --tp-radius-lg: 1rem;
+}
+
+/* Global Styles */
+body {
+  margin: 0;
+  font-family: var(--tp-font-family);
+  line-height: 1.6;
+  background-color: var(--tp-white);
+  color: var(--tp-dark-gray);
+}
+
+/* Headings */
+h1 {
+  font-size: calc(var(--tp-heading-size) + 0.25vw);
+  margin-bottom: var(--tp-spacing-lg);
+}
+
+h2, h3 {
+  font-size: calc(var(--tp-heading-size) - 0.1rem);
+}
+
+/* Buttons */
+.btn {
+  background-color: var(--tp-primary-blue);
+  color: var(--tp-white);
+  padding: var(--tp-card-padding);
+  border-radius: var(--tp-radius-md);
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+  background-color: #003a8c;
+}
+
+/* Cards */
+.card {
+  background-color: var(--tp-light-gray);
+  border-radius: var(--tp-radius-lg);
+  padding: var(--tp-card-padding);
+  box-shadow: var(--tp-shadow-md);
+  margin-bottom: var(--tp-spacing-lg);
+}
+
+/* Form Elements */
+input, textarea {
+  border-radius: var(--tp-radius-sm);
+  padding: 0.75rem;
+  border: 1px solid var(--tp-light-gray);
+  resize: vertical;
+}
+
+input:focus, textarea:focus {
+  border-color: var(--tp-primary-blue);
+}
+
+textarea {
+  min-height: 120px;
+}
+
+/* Navigation */
+.navbar {
+  background-color: var(--tp-light-gray);
+  padding: var(--tp-spacing-sm) var(--tp-spacing-lg);
+}
+
+.nav-link {
+  color: var(--tp-dark-gray);
+  transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+  color: var(--tp-primary-blue);
+}
+
+/* Icons */
+.lucide-icon {
+  fill: var(--tp-primary-blue);
+  transition: fill 0.3s ease;
+}
+
+.lucide-icon:hover {
+  fill: var(--tp-accent-green);
+}
+
+/* Charts (Recharts) */
+.chart {
+  margin-bottom: var(--tp-spacing-lg);
+}
+
+/* AI Assistant UI */
+.ai-assistant {
+  background-color: var(--tp-light-gray);
+  padding: var(--tp-card-padding);
+  border-radius: var(--tp-radius-lg);
+  box-shadow: var(--tp-shadow-lg);
+  margin-top: var(--tp-spacing-lg);
+}
