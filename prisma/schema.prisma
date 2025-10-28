@@ -1,0 +1,135 @@
+prisma
+// Define enums first
+enum PlanTier {
+  Free
+  Pro
+  Business
+}
+
+enum UserRole {
+  Clerk
+  Admin
+}
+
+enum UserStatus {
+  Active
+  Inactive
+  Deleted
+}
+
+enum ProjectStatus {
+  Draft
+  InProgress
+  Completed
+  Cancelled
+}
+
+enum SubscriptionStatus {
+  Active
+  Pending
+  Expired
+  Cancelled
+}
+
+enum LogModel {
+  User
+  Project
+  Subscription
+}
+
+enum Action {
+  UserCreated
+  UserUpdated
+  UserDeleted
+  ProjectCreated
+  ProjectUpdated
+  ProjectDeleted
+  SubscriptionCreated
+  SubscriptionUpdated
+  SubscriptionCancelled
+}
+
+// User model - core entity
+model User {
+  id            Int      @id @default(autoincrement())
+  email         String   @unique
+  passwordHash  String   // Store hashed password
+  name          String?
+  avatarUrl     String?  // For user profile
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  status        UserStatus
+  role          UserRole
+
+  // Relationships
+  projects      Project[]   @relation(fields: [id], references: [ownerId])
+  subscriptions Subscription[] @relation(fields: [id], references: [userId])
+
+  // Custom methods
+  async $createSubscription(projectId Int, planTier PlanTier): Subscription
+}
+
+// Project model - business entity
+model Project {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  industry    String   // "Pharmaceuticals"
+  audience    String   // "Patients"
+  status      ProjectStatus
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Ownership
+  owner     User      @relation(fields: [ownerId], references: [id])
+  ownerId   Int
+
+  // Collaboration (could expand with Supabase Realtime)
+  members   User[]    // Might want to implement separate project membership table
+
+  // Financial
+  subscriptions Subscription[] @relation(fields: [id], references: [projectId])
+}
+
+// Subscription model
+model Subscription {
+  id            Int      @id @default(autoincrement())
+  userId        Int
+  projectId     Int
+  planTier      PlanTier
+  startDate     DateTime @default(now())
+  endDate       DateTime?
+  status        SubscriptionStatus
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Relationships
+  user      User   @relation(fields: [userId], references: [id])
+  project   Project @relation(fields: [projectId], references: [id])
+
+  // Validations
+  uniqueFields: [userId, projectId]
+}
+
+// AuditLog model for tracking changes
+model AuditLog {
+  id            Int      @id @default(autoincrement())
+  modelTypeId   Int      // Foreign key to track which model changed
+  modelTypeEnum LogModel @default(LogModel.Project) // Default to Project
+  action        Action
+  details       String?
+  createdAt     DateTime @default(now())
+
+  // Optional foreign keys
+  userId        Int?
+  projectId     Int?
+  subscriptionId Int?
+
+  // Relations
+  user          User?   @relation(fields: [userId], references: [id])
+  project       Project? @relation(fields: [projectId], references: [id])
+  subscription  Subscription? @relation(fields: [subscriptionId], references: [id])
+
+  // Custom method to create log entries from business actions
+  static createFromAction(modelType LogModel, action Action, details String?)
+}
