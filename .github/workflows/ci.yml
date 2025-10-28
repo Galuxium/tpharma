@@ -1,0 +1,54 @@
+yaml
+name: CI/CD for Pharmacy Website
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  # Type Checking Job
+  typecheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install dependencies
+        run: npm install
+      - name: TypeScript type-check
+        run: npx tsc --noEmit
+
+  # Linting Job
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install dependencies
+        run: npm install
+      - name: Run ESLint
+        run: npm run lint
+
+  # Testing Job
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install dependencies
+        run: npm install
+      - name: Run unit tests
+        run: npm test
+      - name: Run Playwright E2E tests
+        run: npx playwright test
+
+  # Vercel Deployment Stub
+  deploy:
+    needs: [typecheck, lint, tests]
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Vercel CLI
+        run: npm install -g vercel
+      - name: Deploy to Vercel
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: vercel --prod
